@@ -3,10 +3,45 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:WPFWeatherApp.ViewModel"
         xmlns:local="clr-namespace:WPFWeatherApp.View"
         mc:Ignorable="d"
-        Title="WeatherWindow" Height="450" Width="800">
-    <Grid>
+        Title="WeatherWindow" Height="450" Width="400">
+    <Window.Resources>
+        <vm:WeatherVM x:Key="vm"/>
+        
+    </Window.Resources>
+    <Grid DataContext="{StaticResource vm}" Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel>
+            <TextBlock Text="Search for city:"/>
+            <TextBox Text="{Binding Query, Mode=TwoWay}" Margin="10"/>
+            <Button Content="Search" Margin="10"/>
+            <ListView>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <TextBlock/>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackPanel>
+        <Grid DataContext="{Binding CurrentConditions}" Grid.Row="1" Background="#2020FF">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0">
+                <TextBlock DataContext="{StaticResource vm}" Text="{Binding SelectedCity.LocalizedName}" Foreground="White" Margin="10" FontWeight="Black" FontSize="20"/>
+                <TextBlock Text="{Binding WeatherText}" Foreground="LightBlue" Margin="10" FontSize="20"/>
+            </StackPanel>
+            <TextBlock Grid.Column="1" Text="{Binding Temperature.Metric.Value}" Foreground="White" Margin="10" FontWeight="Bold" FontSize="40" VerticalAlignment="Center"/>
+        </Grid>
         
     </Grid>
 </Window>
