@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
@@ -25,6 +26,8 @@ namespace WPFWeatherApp.ViewModel
             }
         }
 
+        public ObservableCollection<City> Cities { get; set; }
+
         private CurrentCondition currentConditions;
 
         public CurrentCondition CurrentConditions
@@ -44,6 +47,7 @@ namespace WPFWeatherApp.ViewModel
         public WeatherVM()
         {
             SearchCommand = new SearchCommand(this);
+            Cities = new ObservableCollection<City>();
         }
 
         private City selectedCity;
@@ -53,13 +57,28 @@ namespace WPFWeatherApp.ViewModel
             get { return selectedCity; }
             set {
                 selectedCity = value;
+
+                
                 OnPropertyChanged("SelectedCity");
+                GetCurrentConditions();
             }
+        }
+
+        private async void GetCurrentConditions()
+        {
+            Query = string.Empty;
+            Cities.Clear();
+            CurrentConditions =  await AccuweatherHelper.GetCurrentCondition(SelectedCity.Key);
         }
 
         public async void makeQuery()
         {
             var cities = await AccuweatherHelper.GetCities(Query);
+            Cities.Clear();
+            foreach(City i in cities)
+            {
+                Cities.Add(i);
+            }
         }
 
 

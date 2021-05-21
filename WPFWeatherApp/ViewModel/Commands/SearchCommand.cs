@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using WPFWeatherApp.Model;
 
 namespace WPFWeatherApp.ViewModel.Commands
 {
@@ -17,16 +19,26 @@ namespace WPFWeatherApp.ViewModel.Commands
             set;
         }
 
+        
+
         public SearchCommand(WeatherVM vm)
         {
             VM = vm;
+            
         }
 
 
-        public event EventHandler CanExecuteChanged;
+        public event EventHandler CanExecuteChanged
+        {
+            add { CommandManager.RequerySuggested += value; }
+            remove { CommandManager.RequerySuggested -= value; }
+        }
 
         public bool CanExecute(object parameter)
         {
+            string query = parameter as string;
+            if (string.IsNullOrWhiteSpace(query))
+                return false;
             return true;
         }
 
