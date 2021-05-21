@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WPFWeatherApp.Model;
+using WPFWeatherApp.ViewModel.Commands;
+using WPFWeatherApp.ViewModel.Helper;
 
 namespace WPFWeatherApp.ViewModel
 {
@@ -34,6 +36,16 @@ namespace WPFWeatherApp.ViewModel
             }
         }
 
+        public SearchCommand SearchCommand {
+            get;
+            set;
+        }
+
+        public WeatherVM()
+        {
+            SearchCommand = new SearchCommand(this);
+        }
+
         private City selectedCity;
 
         public City SelectedCity
@@ -43,6 +55,11 @@ namespace WPFWeatherApp.ViewModel
                 selectedCity = value;
                 OnPropertyChanged("SelectedCity");
             }
+        }
+
+        public async void makeQuery()
+        {
+            var cities = await AccuweatherHelper.GetCities(Query);
         }
 
 
