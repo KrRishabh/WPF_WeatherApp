@@ -5,11 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:WPFWeatherApp.ViewModel"
         xmlns:local="clr-namespace:WPFWeatherApp.View"
+        xmlns:converters="clr-namespace:WPFWeatherApp.ViewModel.ValueConverters"
         mc:Ignorable="d"
         Title="WeatherWindow" Height="450" Width="400">
     <Window.Resources>
         <vm:WeatherVM x:Key="vm"/>
-        
+        <converters:BoolToRainConverter x:Key="boolToRain"/>
+
     </Window.Resources>
     <Grid DataContext="{StaticResource vm}" Margin="10">
         <Grid.RowDefinitions>
@@ -39,6 +41,7 @@
             <StackPanel Grid.Column="0">
                 <TextBlock DataContext="{StaticResource vm}" Text="{Binding SelectedCity.LocalizedName}" Foreground="White" Margin="10" FontWeight="Black" FontSize="20"/>
                 <TextBlock Text="{Binding WeatherText}" Foreground="LightBlue" Margin="10" FontSize="20"/>
+                <TextBlock Text="{Binding HasPrecipitation, Converter={StaticResource boolToRain}}"  Foreground="LightBlue" Margin="10"/>
             </StackPanel>
             <TextBlock Grid.Column="1" Text="{Binding Temperature.Metric.Value}" Foreground="White" Margin="10" FontWeight="Bold" FontSize="40" VerticalAlignment="Center"/>
         </Grid>
